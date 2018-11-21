@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 
 const taskRoutes = require('./api/routes/tasks')
 
-mongoose.connect('mongodb://localhost:27017/myapp')
+mongoose.connect('mongodb://localhost:27017/taskProject', { useNewUrlParser: true })
 
 app.use(bodyParser.urlencoded({
     extended: false
