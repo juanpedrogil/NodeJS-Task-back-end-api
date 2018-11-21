@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 
 //Get method to get all the tasks created ever
 router.get('/', (req,res,next)=>{
-    Task.find().exec().then(result => {
+    Task.find().select('_id title message course date').exec().then(result => {
         res.status(200).json(result)
     }).catch(err => {
         res.status(500).json({
@@ -40,7 +40,7 @@ router.post('/newTask', (req,res,next)=>{
 //Get method to get a specific task
 router.get('/:taskId', (req,res,next)=>{
     const id = req.params.taskId
-    Task.findById(id).exec().then(doc => {
+    Task.findById(id).select('_id title message course date').exec().then(doc => {
         console.log(doc)
         if(doc) {
             res.status(200).json(doc)
