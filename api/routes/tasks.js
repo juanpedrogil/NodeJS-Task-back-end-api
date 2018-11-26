@@ -3,9 +3,10 @@ const express = require('express')
 const router = express.Router()
 const Task = require('../models/task')
 const mongoose = require('mongoose')
+const checkAuth = require('../middleware/check-auth')
 
 //Get method to get all the tasks created ever
-router.get('/', (req,res,next)=>{
+router.get('/', checkAuth, (req,res,next)=>{
     Task.find().select('_id title message course date').exec().then(result => {
         res.status(200).json(result)
     }).catch(err => {
@@ -16,7 +17,7 @@ router.get('/', (req,res,next)=>{
 })
 
 //Post method to add a new task to our database
-router.post('/newTask', (req,res,next)=>{
+router.post('/newTask', checkAuth, (req,res,next)=>{
     const id = new mongoose.Types.ObjectId()
     console.log(id)
     const task = new Task({
@@ -38,7 +39,7 @@ router.post('/newTask', (req,res,next)=>{
 })
 
 //Get method to get a specific task
-router.get('/:taskId', (req,res,next)=>{
+router.get('/:taskId', checkAuth, (req,res,next)=>{
     const id = req.params.taskId
     Task.findById(id).select('_id title message course date').exec().then(doc => {
         console.log(doc)
@@ -58,7 +59,7 @@ router.get('/:taskId', (req,res,next)=>{
 })
 
 //Delete method to delete a task from de collection
-router.delete('/:taskId',(req,res,next) => {
+router.delete('/:taskId', checkAuth, (req,res,next) => {
     const id = req.params.taskId
     Task.remove({_id: id}).exec().then(result => {
         res.status(200).json(result)
@@ -70,7 +71,7 @@ router.delete('/:taskId',(req,res,next) => {
 })
 
 //Put method to update a task
-router.put('/:taskId',(req,res,next) => {
+router.put('/:taskId', checkAuth, (req,res,next) => {
     const id = req.params.taskId
     Task.update({_id:id},{$set:{
         title: req.body.title,
